@@ -1,0 +1,154 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Quran Birthday Verse</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-image: url('https://i.imgur.com/MUQw1oG.jpeg');
+      background-size: cover;
+      color: white;
+      text-align: center;
+      padding: 30px;
+    }
+    .container {
+      background: rgba(0, 0, 0, 0.7);
+      padding: 30px;
+      margin: auto;
+      max-width: 500px;
+      border-radius: 15px;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+    }
+    input, button, select {
+      width: 90%;
+      padding: 10px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 8px;
+    }
+    button {
+      background-color: #2ecc71;
+      color: white;
+      cursor: pointer;
+    }
+    #verseDisplay {
+      margin-top: 20px;
+      animation: fadeIn 2s ease-in-out;
+    }
+    @keyframes fadeIn {
+      0% {opacity: 0;}
+      100% {opacity: 1;}
+    }
+  </style>
+</head>
+<body>
+
+<div class="container" id="registerBox">
+  <h2>Register</h2>
+  <input type="text" id="regUsername" placeholder="Create Username" />
+  <input type="password" id="regPassword" placeholder="Create Password" />
+  <button onclick="register()">Register</button>
+</div>
+
+<div class="container" id="loginBox" style="display:none;">
+  <h2>Login</h2>
+  <input type="text" id="loginUsername" placeholder="Username" />
+  <input type="password" id="loginPassword" placeholder="Password" />
+  <button onclick="login()">Login</button>
+</div>
+
+<div class="container" id="nameBox" style="display:none;">
+  <h2>Enter Your Name</h2>
+  <input type="text" id="userName" placeholder="Your Name" />
+  <button onclick="submitName()">Next</button>
+</div>
+
+<div class="container" id="birthdayBox" style="display:none;">
+  <h2>Enter Your Birthday</h2>
+  <input type="date" id="birthday" />
+  <button onclick="showVerse()">Get Verse</button>
+</div>
+
+<div class="container" id="verseBox" style="display:none;">
+  <h2 id="greetingText"></h2>
+  <div id="verseDisplay"></div>
+  <button onclick="exit()">Exit</button>
+</div>
+
+<script>
+  let storedUser = {};
+
+  function register() {
+    const user = document.getElementById("regUsername").value.trim();
+    const pass = document.getElementById("regPassword").value.trim();
+    if (user && pass) {
+      storedUser = { user, pass };
+      alert("Registered successfully! Please login.");
+      document.getElementById("registerBox").style.display = "none";
+      document.getElementById("loginBox").style.display = "block";
+    } else {
+      alert("Please enter username and password.");
+    }
+  }
+
+  function login() {
+    const user = document.getElementById("loginUsername").value.trim();
+    const pass = document.getElementById("loginPassword").value.trim();
+    if (user === storedUser.user && pass === storedUser.pass) {
+      document.getElementById("loginBox").style.display = "none";
+      document.getElementById("nameBox").style.display = "block";
+    } else {
+      alert("Incorrect login credentials.");
+    }
+  }
+
+  let userName = "";
+
+  function submitName() {
+    userName = document.getElementById("userName").value.trim();
+    if (userName) {
+      document.getElementById("nameBox").style.display = "none";
+      document.getElementById("birthdayBox").style.display = "block";
+    } else {
+      alert("Please enter your name.");
+    }
+  }
+
+  function showVerse() {
+    const bday = document.getElementById("birthday").value;
+    const verseBox = document.getElementById("verseDisplay");
+    const greeting = document.getElementById("greetingText");
+    if (!bday) {
+      alert("Please select your birthday.");
+      return;
+    }
+
+    const day = new Date(bday).getDate();
+    const verses = [
+      "Indeed, with hardship [will be] ease. (Quran 94:6)",
+      "And whoever puts their trust in Allah – then He will suffice him. (Quran 65:3)",
+      "So remember Me; I will remember you. (Quran 2:152)",
+      "Indeed, Allah is with the patient. (Quran 2:153)",
+      "Call upon Me; I will respond to you. (Quran 40:60)",
+      "Indeed, My mercy encompasses all things. (Quran 7:156)",
+      "And your Lord is the Forgiving, Full of Mercy. (Quran 18:58)"
+    ];
+    const selectedVerse = verses[day % verses.length];
+
+    greeting.innerText = `Hi, ${userName}! Here's your verse:`;
+    verseBox.innerHTML = `<p style="font-size:18px; padding:10px;">"${selectedVerse}"</p>`;
+
+    document.getElementById("birthdayBox").style.display = "none";
+    document.getElementById("verseBox").style.display = "block";
+  }
+
+  function exit() {
+    location.reload();
+  }
+</script>
+
+</body>
+</html>
